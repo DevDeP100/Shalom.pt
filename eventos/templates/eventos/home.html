@@ -1,0 +1,396 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Shalom.pt - Eventos Especiais{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+    
+    .cta-button {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    
+    .carousel-section {
+        background: #f8f9fa;
+        padding: 80px 0;
+    }
+    
+    .carousel-item {
+        height: 500px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .carousel-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        color: white;
+        padding: 40px;
+    }
+    
+    .event-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .event-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
+    
+    .event-image {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .event-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 15px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: #2c3e50;
+    }
+    
+    .category-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    .category-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .stats-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 80px 0;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+    
+    .newsletter-section {
+        background: #f8f9fa;
+        padding: 80px 0;
+    }
+    
+    .newsletter-form {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-content">
+                <h1 class="hero-title">Indescribable.</h1>
+                <p class="hero-subtitle">You just have to experience it.</p>
+                <a href="{% url 'eventos:lista_eventos' %}" class="btn cta-button">
+                    <i class="fas fa-calendar-alt"></i> Ver Todos os Eventos
+                </a>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <i class="fas fa-calendar-alt fa-8x text-white opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Carousel Section -->
+<section class="carousel-section">
+    <div class="container">
+        <h2 class="section-title">Eventos em Destaque</h2>
+        
+        {% if eventos_destaque %}
+        <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                {% for evento in eventos_destaque %}
+                <button type="button" data-bs-target="#eventCarousel" data-bs-slide-to="{{ forloop.counter0 }}" 
+                        {% if forloop.first %}class="active"{% endif %}></button>
+                {% endfor %}
+            </div>
+            
+            <div class="carousel-inner">
+                {% for evento in eventos_destaque %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    {% if evento.imagem %}
+                    <div style="background-image: url('{{ evento.imagem.url }}'); height: 500px; background-size: cover; background-position: center;">
+                    {% else %}
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 500px;">
+                    {% endif %}
+                        <div class="carousel-overlay">
+                            <div class="container">
+                                <h3 class="display-4">{{ evento.titulo }}</h3>
+                                <p class="lead">{{ evento.descricao|truncatewords:30 }}</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><i class="fas fa-calendar"></i> {{ evento.data_inicio|date:"d/m/Y H:i" }}</p>
+                                        <p><i class="fas fa-map-marker-alt"></i> {{ evento.local }}</p>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        {% if evento.preco > 0 %}
+                                        <span class="badge bg-primary fs-5">€ {{ evento.preco }}</span>
+                                        {% else %}
+                                        <span class="badge bg-success fs-5">Gratuito</span>
+                                        {% endif %}
+                                        <br>
+                                        <a href="{% url 'eventos:detalhe_evento' evento.id %}" class="btn btn-light mt-2">
+                                            Ver Detalhes
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+            <h4>Nenhum evento em destaque no momento</h4>
+            <p class="text-muted">Volte em breve para novos eventos!</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title">Categorias</h2>
+        <div class="row">
+            {% for categoria in categorias %}
+            <div class="col-md-4 col-lg-2 mb-4">
+                <div class="category-card">
+                    <div class="category-icon" style="color: {{ categoria.cor }};">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <h5>{{ categoria.nome }}</h5>
+                    <p class="text-muted small">{{ categoria.descricao|truncatewords:10 }}</p>
+                    <a href="{% url 'eventos:lista_eventos' %}?categoria={{ categoria.id }}" class="btn btn-outline-primary btn-sm">
+                        Ver Eventos
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">{{ eventos_recentes.count }}</div>
+                    <div class="stat-label">Eventos Ativos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">{{ categorias.count }}</div>
+                    <div class="stat-label">Categorias</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Participantes</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Satisfação</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Events Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title">Eventos Recentes</h2>
+        <div class="row">
+            {% for evento in eventos_recentes %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="event-card">
+                    {% if evento.imagem %}
+                    <div class="event-image" style="background-image: url('{{ evento.imagem.url }}');">
+                    {% else %}
+                    <div class="event-image bg-light d-flex align-items-center justify-content-center">
+                        <i class="fas fa-calendar-alt fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                        <span class="event-badge" style="background-color: {{ evento.categoria.cor }};">
+                            {{ evento.categoria.nome }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ evento.titulo }}</h5>
+                        <p class="card-text text-muted">{{ evento.descricao|truncatewords:15 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar"></i> {{ evento.data_inicio|date:"d/m/Y" }}
+                            </small>
+                            {% if evento.preco > 0 %}
+                            <span class="text-primary fw-bold">€ {{ evento.preco }}</span>
+                            {% else %}
+                            <span class="text-success fw-bold">Gratuito</span>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'eventos:detalhe_evento' evento.id %}" class="btn btn-outline-primary w-100 mt-3">
+                            Ver Detalhes
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'eventos:lista_eventos' %}" class="btn btn-primary btn-lg">
+                Ver Todos os Eventos
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="section-title">Fique por Dentro</h2>
+                <p class="lead mb-4">Inscreva-se para receber novidades sobre nossos eventos</p>
+                <form class="newsletter-form">
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control form-control-lg" placeholder="Seu e-mail">
+                        <button class="btn btn-primary btn-lg" type="submit">
+                            <i class="fas fa-paper-plane"></i> Inscrever
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-play carousel
+    $(document).ready(function() {
+        $('#eventCarousel').carousel({
+            interval: 5000
+        });
+    });
+</script>
+{% endblock %} 

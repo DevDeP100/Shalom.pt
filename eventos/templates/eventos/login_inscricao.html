@@ -1,0 +1,320 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Login para Inscrições - Comunidade Shalom Portugal{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --shalom-primary: #1e3a8a;
+        --shalom-secondary: #3b82f6;
+        --shalom-accent: #f59e0b;
+        --shalom-light: #f8fafc;
+        --shalom-dark: #1e293b;
+    }
+    
+    .login-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    
+    .login-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+        width: 100%;
+        max-width: 450px;
+        position: relative;
+    }
+    
+    .login-header {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+        position: relative;
+    }
+    
+    .login-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="cross" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23cross)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .login-header-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .login-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        color: var(--shalom-accent);
+    }
+    
+    .login-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .login-subtitle {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-bottom: 0;
+    }
+    
+    .login-body {
+        padding: 40px 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: var(--shalom-dark);
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .form-control {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 15px 20px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+    }
+    
+    .form-control:focus {
+        border-color: var(--shalom-secondary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        background: white;
+        outline: none;
+    }
+    
+    .btn-login {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        color: white;
+    }
+    
+    .btn-register {
+        background: transparent;
+        border: 2px solid var(--shalom-primary);
+        color: var(--shalom-primary);
+        padding: 15px 30px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+    
+    .btn-register:hover {
+        background: var(--shalom-primary);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+    }
+    
+    .divider {
+        text-align: center;
+        margin: 25px 0;
+        position: relative;
+    }
+    
+    .divider::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: #e2e8f0;
+    }
+    
+    .divider-text {
+        background: white;
+        padding: 0 15px;
+        color: #6b7280;
+        font-size: 0.9rem;
+    }
+    
+    .alert {
+        border-radius: 12px;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+        border: none;
+    }
+    
+    .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+        border-left: 4px solid #10b981;
+    }
+    
+    .alert-error {
+        background: #fee2e2;
+        color: #991b1b;
+        border-left: 4px solid #ef4444;
+    }
+    
+    .alert-warning {
+        background: #fef3c7;
+        color: #92400e;
+        border-left: 4px solid #f59e0b;
+    }
+    
+    .login-footer {
+        text-align: center;
+        padding: 20px 30px;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+    }
+    
+    .login-footer a {
+        color: var(--shalom-secondary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .login-footer a:hover {
+        text-decoration: underline;
+    }
+    
+    .back-link {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        z-index: 10;
+    }
+    
+    .back-link:hover {
+        color: var(--shalom-accent);
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <a href="{% url 'eventos:home' %}" class="back-link">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+    
+    <div class="login-card">
+        <div class="login-header">
+            <div class="login-header-content">
+                <div class="login-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h1 class="login-title">Acesso para Inscrições</h1>
+                <p class="login-subtitle">Faça login para se inscrever em eventos</p>
+            </div>
+        </div>
+        
+        <div class="login-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_username" class="form-label">
+                        <i class="fas fa-user"></i> Nome de usuário
+                    </label>
+                    <input type="text" name="username" id="id_username" class="form-control" 
+                           placeholder="Digite seu nome de usuário" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_password" class="form-label">
+                        <i class="fas fa-lock"></i> Senha
+                    </label>
+                    <input type="password" name="password" id="id_password" class="form-control" 
+                           placeholder="Digite sua senha" required>
+                </div>
+                
+                <button type="submit" class="btn btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+            </form>
+            
+            <div class="divider">
+                <span class="divider-text">ou</span>
+            </div>
+            
+            <a href="{% url 'eventos:registro' %}" class="btn btn-register">
+                <i class="fas fa-user-plus"></i> Criar Nova Conta
+            </a>
+        </div>
+        
+        <div class="login-footer">
+            <p>Não tem uma conta? <a href="{% url 'eventos:registro' %}">Registre-se aqui</a></p>
+            <p><small>Precisa de ajuda? Entre em contato conosco</small></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Foco no primeiro campo
+        $('#id_username').focus();
+        
+        // Validação em tempo real
+        $('.form-control').on('input', function() {
+            if ($(this).val().length > 0) {
+                $(this).addClass('has-content');
+            } else {
+                $(this).removeClass('has-content');
+            }
+        });
+        
+        // Animação de loading no botão
+        $('form').on('submit', function() {
+            $('.btn-login').html('<i class="fas fa-spinner fa-spin"></i> Entrando...');
+            $('.btn-login').prop('disabled', true);
+        });
+    });
+</script>
+{% endblock %} 

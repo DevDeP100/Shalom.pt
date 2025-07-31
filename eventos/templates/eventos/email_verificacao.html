@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar Email - {{ site_name }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .welcome {
+            font-size: 18px;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .message {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        
+        .code-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .code {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e3a8a;
+            letter-spacing: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .instructions h3 {
+            color: #1976d2;
+            margin-top: 0;
+            font-size: 16px;
+        }
+        
+        .instructions ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #424242;
+        }
+        
+        .button {
+            display: inline-block;
+            background: #1e3a8a;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+        }
+        
+        .expiry {
+            color: #dc3545;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-cross"></i> {{ site_name }}</h1>
+        </div>
+        
+        <div class="content">
+            <div class="welcome">
+                Olá, {{ user.first_name|default:user.username }}!
+            </div>
+            
+            <div class="message">
+                <p>Obrigado por se registrar na Comunidade Shalom Portugal! Para ativar sua conta e começar a participar dos nossos eventos, você precisa verificar seu endereço de email.</p>
+            </div>
+            
+            <div class="code-box">
+                <p style="margin-bottom: 10px; color: #666;">Seu código de verificação:</p>
+                <div class="code">{{ codigo.codigo }}</div>
+            </div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> Como verificar sua conta:</h3>
+                <ul>
+                    <li>Acesse o link de verificação enviado junto com este email</li>
+                    <li>Digite o código acima no campo de verificação</li>
+                    <li>Clique em "Verificar Código"</li>
+                    <li>Sua conta será ativada automaticamente</li>
+                </ul>
+            </div>
+            
+            <div class="warning">
+                <strong><i class="fas fa-exclamation-triangle"></i> Importante:</strong>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>Este código expira em <span class="expiry">24 horas</span></li>
+                    <li>Não compartilhe este código com ninguém</li>
+                    <li>Se você não solicitou este registro, ignore este email</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{{ request.scheme }}://{{ request.get_host }}{% url 'eventos:verificar_email' user.id %}" class="button">
+                    <i class="fas fa-check"></i> Verificar Minha Conta
+                </a>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="color: #666; font-size: 14px;">
+                    Se o botão não funcionar, copie e cole este link no seu navegador:<br>
+                    <a href="{{ request.scheme }}://{{ request.get_host }}{% url 'eventos:verificar_email' user.id %}" style="color: #1e3a8a; word-break: break-all;">
+                        {{ request.scheme }}://{{ request.get_host }}{% url 'eventos:verificar_email' user.id %}
+                    </a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>{{ site_name }}</strong></p>
+            <p>Notícias, eventos e formação da Comunidade Católica Shalom em Portugal</p>
+            <p style="margin-top: 20px; font-size: 12px; color: #999;">
+                Este email foi enviado para {{ user.email }}<br>
+                Se você não se registrou, ignore este email.
+            </p>
+        </div>
+    </div>
+</body>
+</html> 

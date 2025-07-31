@@ -1,0 +1,482 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}{{ evento.titulo }} - Comunidade Shalom Portugal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detalhe-evento-section {
+        padding: 60px 0;
+        background: var(--shalom-light);
+        min-height: 100vh;
+    }
+    
+    .page-header {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 40px;
+    }
+    
+    .page-header h1 {
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .page-header p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+    
+    .evento-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+    
+    .evento-image {
+        height: 400px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .evento-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 8px 16px;
+        border-radius: 25px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .evento-content {
+        padding: 30px;
+    }
+    
+    .evento-title {
+        font-weight: 700;
+        color: var(--shalom-dark);
+        margin-bottom: 15px;
+        font-size: 2rem;
+    }
+    
+    .evento-descricao {
+        color: #6b7280;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .info-item {
+        background: #f8fafc;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 4px solid var(--shalom-primary);
+    }
+    
+    .info-item h6 {
+        color: var(--shalom-primary);
+        font-weight: 700;
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+    
+    .info-item p {
+        color: var(--shalom-dark);
+        margin: 0;
+        font-weight: 500;
+    }
+    
+    .info-item .text-muted {
+        color: #6b7280 !important;
+        font-weight: normal;
+    }
+    
+    .inscricao-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 25px;
+        height: fit-content;
+    }
+    
+    .inscricao-card h5 {
+        color: var(--shalom-primary);
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    
+    .btn-inscrever {
+        background: var(--shalom-primary);
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .btn-inscrever:hover {
+        background: var(--shalom-secondary);
+        transform: translateY(-2px);
+    }
+    
+    .btn-cancelar {
+        background: #dc2626;
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .btn-cancelar:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+    }
+    
+    .btn-voltar {
+        background: transparent;
+        border: 2px solid var(--shalom-primary);
+        color: var(--shalom-primary);
+        padding: 12px 25px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-voltar:hover {
+        background: var(--shalom-primary);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+    }
+    
+    .status-pendente {
+        background: #fef3c7;
+        color: #92400e;
+    }
+    
+    .status-confirmada {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .status-cancelada {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .status-presente {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+    
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .stat-card {
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--shalom-primary);
+        margin-bottom: 5px;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+        color: #6b7280;
+    }
+    
+    .organizador-card {
+        background: #f8fafc;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+    
+    .organizador-card h6 {
+        color: var(--shalom-primary);
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .organizador-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .organizador-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="detalhe-evento-section">
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-calendar-check"></i> Detalhes do Evento</h1>
+            <p>Informações completas sobre o evento</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="evento-card">
+                    {% if evento.imagem %}
+                    <div class="evento-image" style="background-image: url('{{ evento.imagem.url }}');">
+                    {% else %}
+                    <div class="evento-image" style="background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);">
+                    {% endif %}
+                        <span class="evento-badge" style="background-color: {{ evento.categoria.cor }};">
+                            {{ evento.categoria.nome }}
+                        </span>
+                    </div>
+                    
+                    <div class="evento-content">
+                        <h1 class="evento-title">{{ evento.titulo }}</h1>
+                        <p class="evento-descricao">{{ evento.descricao }}</p>
+                        
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <h6><i class="fas fa-calendar"></i> Data e Horário</h6>
+                                <p><strong>Início:</strong> {{ evento.data_inicio|date:"d/m/Y H:i" }}</p>
+                                <p class="text-muted"><strong>Fim:</strong> {{ evento.data_fim|date:"d/m/Y H:i" }}</p>
+                            </div>
+                            
+                            <div class="info-item">
+                                <h6><i class="fas fa-map-marker-alt"></i> Local</h6>
+                                <p><strong>{{ evento.local }}</strong></p>
+                                <p class="text-muted">{{ evento.endereco }}</p>
+                            </div>
+                            
+                            <div class="info-item">
+                                <h6><i class="fas fa-users"></i> Capacidade</h6>
+                                {% if evento.capacidade_maxima == 0 %}
+                                <p><span class="text-success">Ilimitado</span></p>
+                                {% else %}
+                                <p>{{ evento.inscricoes_count }} / {{ evento.capacidade_maxima }} inscritos</p>
+                                {% if evento.esta_cheio %}
+                                <p class="text-danger"><strong>Lotado</strong></p>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                            
+                            <div class="info-item">
+                                <h6><i class="fas fa-euro-sign"></i> Preço</h6>
+                                {% if evento.preco > 0 %}
+                                <p><span class="text-primary fw-bold">€ {{ evento.preco }}</span></p>
+                                {% else %}
+                                <p><span class="text-success fw-bold">Gratuito</span></p>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="info-item">
+                                <h6><i class="fas fa-clock"></i> Status</h6>
+                                {% if evento.esta_ativo %}
+                                <p><span class="badge bg-success">Ativo</span></p>
+                                {% else %}
+                                <p><span class="badge bg-secondary">Finalizado</span></p>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="info-item">
+                                <h6><i class="fas fa-calendar-plus"></i> Criado em</h6>
+                                <p>{{ evento.criado_em|date:"d/m/Y H:i" }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="organizador-card">
+                            <h6><i class="fas fa-user"></i> Organizador</h6>
+                            <div class="organizador-info">
+                                <div class="organizador-avatar">
+                                    {{ evento.organizador.first_name|first|default:evento.organizador.username|first }}
+                                </div>
+                                <div>
+                                    <p class="mb-0"><strong>{{ evento.organizador.get_full_name|default:evento.organizador.username }}</strong></p>
+                                    <small class="text-muted">Organizador do evento</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="inscricao-card">
+                    <h5><i class="fas fa-user-plus"></i> Inscrição</h5>
+                    
+                    {% if inscricao_usuario %}
+                    <div class="status-badge status-{{ inscricao_usuario.status }}">
+                        {{ inscricao_usuario.get_status_display }}
+                    </div>
+                    
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-number">{{ evento.inscricoes_count }}</div>
+                            <div class="stat-label">Inscritos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">{{ evento.vagas_disponiveis|default:"∞" }}</div>
+                            <div class="stat-label">Vagas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">
+                                {% if evento.preco > 0 %}
+                                € {{ evento.preco }}
+                                {% else %}
+                                Gratuito
+                                {% endif %}
+                            </div>
+                            <div class="stat-label">Preço</div>
+                        </div>
+                    </div>
+                    
+                    {% if inscricao_usuario.status == 'pendente' %}
+                    <form method="post" action="{% url 'eventos:cancelar_inscricao' evento.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-cancelar">
+                            <i class="fas fa-times"></i> Cancelar Inscrição
+                        </button>
+                    </form>
+                    {% endif %}
+                    
+                    {% else %}
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-number">{{ evento.inscricoes_count }}</div>
+                            <div class="stat-label">Inscritos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">{{ evento.vagas_disponiveis|default:"∞" }}</div>
+                            <div class="stat-label">Vagas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">
+                                {% if evento.preco > 0 %}
+                                € {{ evento.preco }}
+                                {% else %}
+                                Gratuito
+                                {% endif %}
+                            </div>
+                            <div class="stat-label">Preço</div>
+                        </div>
+                    </div>
+                    
+                    {% if evento.tem_link_externo %}
+                        <!-- Link Externo de Inscrição -->
+                        <div class="alert alert-info">
+                            <i class="fas fa-external-link-alt"></i> 
+                            <strong>Inscrição Externa</strong><br>
+                            Este evento utiliza um sistema externo para inscrições.
+                        </div>
+                        
+                        <a href="{{ evento.link_externo }}" target="_blank" class="btn btn-inscrever">
+                            <i class="fas fa-external-link-alt"></i> Inscrever-se (Site Externo)
+                        </a>
+                        
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> 
+                                Você será redirecionado para o site oficial do evento.
+                            </small>
+                        </div>
+                        
+                    {% else %}
+                        <!-- Sistema Interno de Inscrição -->
+                        {% if not user.is_authenticated %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Faça login para se inscrever!</strong><br>
+                            Você precisa estar logado para se inscrever neste evento.
+                        </div>
+                        <a href="{% url 'eventos:login_inscricao' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt"></i> Fazer Login para Inscrição
+                        </a>
+                        {% elif not inscricao_usuario %}
+                            {% if not evento.esta_cheio and evento.esta_ativo %}
+                            <form method="post" action="{% url 'eventos:inscrever_evento' evento.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-inscrever">
+                                    <i class="fas fa-user-plus"></i> Inscrever-se
+                                </button>
+                            </form>
+                            {% elif evento.esta_cheio %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i> Este evento está lotado.
+                            </div>
+                            {% elif not evento.esta_ativo %}
+                            <div class="alert alert-secondary">
+                                <i class="fas fa-clock"></i> Este evento já foi finalizado.
+                            </div>
+                            {% endif %}
+                        {% else %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> Faça login para se inscrever.
+                        </div>
+                        <a href="{% url 'eventos:login' %}" class="btn btn-inscrever">
+                            <i class="fas fa-sign-in-alt"></i> Fazer Login
+                        </a>
+                        {% endif %}
+                    {% endif %}
+                    {% endif %}
+                    
+                    <a href="{% url 'eventos:lista_eventos' %}" class="btn btn-voltar">
+                        <i class="fas fa-arrow-left"></i> Voltar aos Eventos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}Sobre Nós - Comunidade Shalom Portugal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-section {
+        padding: 60px 0;
+        background: var(--shalom-light);
+        min-height: 100vh;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .page-header p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+
+    .about-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+
+    .about-card h3 {
+        color: var(--shalom-primary);
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .about-card p {
+        color: #6b7280;
+        line-height: 1.6;
+        font-size: 1.1rem;
+    }
+
+    .mission-vision {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+
+    .mission-vision h3 {
+        color: white;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .stats-section {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--shalom-primary);
+        margin-bottom: 10px;
+    }
+
+    .stat-label {
+        color: #6b7280;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="about-section">
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-info-circle"></i> Sobre Nós</h1>
+            <p>Conheça a Comunidade Shalom Portugal e nossa missão</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="about-card">
+                    <h3><i class="fas fa-cross"></i> Nossa História</h3>
+                    <p>
+                        A Comunidade Shalom Portugal nasceu da missão evangelizadora da Comunidade Católica Shalom, 
+                        presente em mais de 20 países. Fundada com o propósito de levar a alegria do Evangelho 
+                        e formar discípulos missionários, nossa comunidade tem sido um farol de esperança 
+                        e transformação em Portugal.
+                    </p>
+                    <p>
+                        Desde nossa chegada ao país, temos dedicado nossos esforços para evangelizar, 
+                        formar e enviar missionários que levem a Boa Nova de Jesus Cristo a todos os cantos 
+                        de Portugal e além de suas fronteiras.
+                    </p>
+                </div>
+
+                <div class="mission-vision">
+                    <h3><i class="fas fa-bullseye"></i> Nossa Missão</h3>
+                    <p>
+                        Evangelizar, formar e enviar missionários para a santificação do mundo, 
+                        levando a alegria do Evangelho a todos os povos, especialmente aos jovens, 
+                        através da música, da arte e de todos os meios de comunicação.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3><i class="fas fa-eye"></i> Nossa Visão</h3>
+                    <p>
+                        Ser uma comunidade missionária que, através do testemunho de vida e da 
+                        proclamação da Palavra, leve muitos corações a conhecer e amar Jesus Cristo, 
+                        formando discípulos apaixonados e comprometidos com a missão da Igreja.
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h3><i class="fas fa-heart"></i> Nossos Valores</h3>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i> <strong>Amor a Deus:</strong> Tudo o que fazemos é movido pelo amor a Deus</li>
+                        <li><i class="fas fa-check text-success me-2"></i> <strong>Evangelização:</strong> Proclamar Jesus Cristo com alegria e ousadia</li>
+                        <li><i class="fas fa-check text-success me-2"></i> <strong>Formação:</strong> Formar discípulos maduros na fé</li>
+                        <li><i class="fas fa-check text-success me-2"></i> <strong>Missão:</strong> Enviar missionários para o mundo</li>
+                        <li><i class="fas fa-check text-success me-2"></i> <strong>Comunhão:</strong> Viver em unidade e fraternidade</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="stats-section">
+                    <h3 class="text-center mb-4"><i class="fas fa-chart-line"></i> Nossos Números</h3>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <div class="stat-number">500+</div>
+                                <div class="stat-label">Membros</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <div class="stat-number">15</div>
+                                <div class="stat-label">Anos</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <div class="stat-number">50+</div>
+                                <div class="stat-label">Eventos</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-item">
+                                <div class="stat-number">10</div>
+                                <div class="stat-label">Cidades</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-card">
+                    <h3><i class="fas fa-map-marker-alt"></i> Onde Estamos</h3>
+                    <p><strong>Lisboa</strong> - Sede principal</p>
+                    <p><strong>Porto</strong> - Comunidade ativa</p>
+                    <p><strong>Coimbra</strong> - Missão universitária</p>
+                    <p><strong>Braga</strong> - Presença missionária</p>
+                    <p><strong>Faro</strong> - Expansão sul</p>
+                </div>
+
+                <div class="about-card">
+                    <h3><i class="fas fa-calendar-alt"></i> Próximos Eventos</h3>
+                    <p>Fique por dentro dos nossos eventos e formações:</p>
+                    <a href="{% url 'eventos:lista_eventos' %}" class="btn btn-shalom w-100">
+                        <i class="fas fa-calendar-check"></i> Ver Eventos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

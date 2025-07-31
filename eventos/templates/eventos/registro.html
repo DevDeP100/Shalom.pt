@@ -1,0 +1,172 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Registro - Comunidade Shalom Portugal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .registro-section {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 60px 0;
+    }
+    
+    .registro-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        padding: 40px;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .registro-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .registro-header h2 {
+        color: var(--shalom-primary);
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .registro-header p {
+        color: #6b7280;
+        font-size: 1.1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: var(--shalom-dark);
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .form-control {
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: var(--shalom-secondary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .btn-registro {
+        background: var(--shalom-primary);
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-registro:hover {
+        background: var(--shalom-secondary);
+        transform: translateY(-2px);
+    }
+    
+    .login-link {
+        text-align: center;
+        margin-top: 20px;
+        color: #6b7280;
+    }
+    
+    .login-link a {
+        color: var(--shalom-primary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .login-link a:hover {
+        color: var(--shalom-secondary);
+    }
+    
+    .error-message {
+        color: #dc2626;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+    
+    .help-text {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="registro-section">
+    <div class="container">
+        <div class="registro-card">
+            <div class="registro-header">
+                <h2><i class="fas fa-user-plus"></i> Criar Conta</h2>
+                <p>Junte-se à Comunidade Shalom Portugal</p>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_username" class="form-label">Nome de usuário</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                    <div class="error-message">{{ form.username.errors.0 }}</div>
+                    {% endif %}
+                    <div class="help-text">Escolha um nome de usuário único.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_email" class="form-label">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <div class="error-message">{{ form.email.errors.0 }}</div>
+                    {% endif %}
+                    <div class="help-text">Usaremos este email para verificar sua conta.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_password1" class="form-label">Senha</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                    <div class="error-message">{{ form.password1.errors.0 }}</div>
+                    {% endif %}
+                    <div class="help-text">
+                        Sua senha deve conter pelo menos 8 caracteres e não pode ser muito comum.
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_password2" class="form-label">Confirmar senha</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                    <div class="error-message">{{ form.password2.errors.0 }}</div>
+                    {% endif %}
+                    <div class="help-text">Digite a mesma senha novamente para verificação.</div>
+                </div>
+                
+                <button type="submit" class="btn btn-registro">
+                    <i class="fas fa-user-plus"></i> Criar Conta
+                </button>
+            </form>
+            
+            <div class="login-link">
+                Já tem uma conta? <a href="{% url 'eventos:login' %}">Faça login</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

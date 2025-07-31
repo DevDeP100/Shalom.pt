@@ -1,0 +1,340 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Meu Perfil - Comunidade Shalom Portugal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .perfil-section {
+        padding: 0;
+        background: var(--shalom-light);
+        min-height: 100vh;
+    }
+    
+    .page-header {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 40px;
+    }
+    
+    .page-header h1 {
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .page-header p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+    
+    .perfil-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .perfil-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--shalom-light);
+    }
+    
+    .perfil-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        color: white;
+        font-size: 2.5rem;
+    }
+    
+    .perfil-nome {
+        font-weight: 700;
+        color: var(--shalom-dark);
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+    
+    .perfil-email {
+        color: var(--shalom-secondary);
+        font-size: 1.1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: var(--shalom-dark);
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .form-control {
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    
+    .form-control:focus {
+        border-color: var(--shalom-secondary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+    
+    .btn-salvar {
+        background: var(--shalom-primary);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .btn-salvar:hover {
+        background: var(--shalom-secondary);
+        transform: translateY(-2px);
+    }
+    
+    .btn-cancelar {
+        background: transparent;
+        border: 2px solid var(--shalom-primary);
+        color: var(--shalom-primary);
+        padding: 10px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    
+    .btn-cancelar:hover {
+        background: var(--shalom-primary);
+        color: white;
+    }
+    
+    .form-text {
+        font-size: 0.85rem;
+        color: #6b7280;
+        margin-top: 5px;
+    }
+    
+    .alert {
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border: none;
+    }
+    
+    .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .alert-danger {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .alert-warning {
+        background: #fef3c7;
+        color: #92400e;
+    }
+    
+    .alert-info {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="perfil-section">
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-user"></i> Meu Perfil</h1>
+            <p>Gerencie suas informações pessoais e preferências</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        {% if messages %}
+        <div class="row">
+            <div class="col-12">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="perfil-card">
+                    <div class="perfil-header">
+                        <div class="perfil-avatar">
+                            {% if perfil.foto %}
+                            <img src="{{ perfil.foto.url }}" alt="Foto do perfil" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            {% else %}
+                            <i class="fas fa-user"></i>
+                            {% endif %}
+                        </div>
+                        <h2 class="perfil-nome">{{ user.get_full_name|default:user.username }}</h2>
+                        <p class="perfil-email">{{ user.email }}</p>
+                    </div>
+                    
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="first_name" class="form-label">Nome</label>
+                                    <input type="text" name="first_name" id="first_name" class="form-control" 
+                                           value="{{ user.first_name|default:'' }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="last_name" class="form-label">Sobrenome</label>
+                                    <input type="text" name="last_name" id="last_name" class="form-control" 
+                                           value="{{ user.last_name|default:'' }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" name="email" id="email" class="form-control" 
+                                           value="{{ user.email|default:'' }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="telefone" class="form-label">Telefone</label>
+                                    <input type="tel" name="telefone" id="telefone" class="form-control" 
+                                           value="{{ perfil.telefone|default:'' }}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="data_nascimento" class="form-label">Data de Nascimento</label>
+                                    <input type="date" name="data_nascimento" id="data_nascimento" class="form-control" 
+                                           value="{{ perfil.data_nascimento|date:'Y-m-d'|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="genero" class="form-label">Gênero</label>
+                                    <select name="genero" id="genero" class="form-control">
+                                        <option value="">Selecione...</option>
+                                        <option value="M" {% if perfil.genero == 'M' %}selected{% endif %}>Masculino</option>
+                                        <option value="F" {% if perfil.genero == 'F' %}selected{% endif %}>Feminino</option>
+                                        <option value="O" {% if perfil.genero == 'O' %}selected{% endif %}>Outro</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nif" class="form-label">NIF</label>
+                                    <input type="text" name="nif" id="nif" class="form-control" 
+                                           value="{{ perfil.nif|default:'' }}" placeholder="123456789" maxlength="9">
+                                    <small class="form-text text-muted">Número de Identificação Fiscal (9 dígitos)</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="endereco" class="form-label">Endereço</label>
+                            <textarea name="endereco" id="endereco" class="form-control" rows="3" 
+                                      placeholder="Rua, número e complemento">{{ perfil.endereco|default:'' }}</textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="codigo_postal" class="form-label">Código Postal</label>
+                                    <input type="text" name="codigo_postal" id="codigo_postal" class="form-control" 
+                                           value="{{ perfil.codigo_postal|default:'' }}" placeholder="0000-000">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cidade" class="form-label">Cidade</label>
+                                    <input type="text" name="cidade" id="cidade" class="form-control" 
+                                           value="{{ perfil.cidade|default:'' }}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="concelho" class="form-label">Concelho</label>
+                                    <input type="text" name="concelho" id="concelho" class="form-control" 
+                                           value="{{ perfil.concelho|default:'' }}" placeholder="Município">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="distrito" class="form-label">Distrito</label>
+                                    <input type="text" name="distrito" id="distrito" class="form-control" 
+                                           value="{{ perfil.distrito|default:'' }}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bio" class="form-label">Biografia</label>
+                            <textarea name="bio" id="bio" class="form-control" rows="4" 
+                                      placeholder="Conte um pouco sobre você...">{{ perfil.bio|default:'' }}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" name="newsletter" id="newsletter" class="form-check-input" 
+                                       {% if perfil.newsletter %}checked{% endif %}>
+                                <label for="newsletter" class="form-check-label">
+                                    Receber newsletter e atualizações por email
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn-salvar">
+                                <i class="fas fa-save"></i> Salvar Alterações
+                            </button>
+                            <a href="{% url 'eventos:home' %}" class="btn-cancelar">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

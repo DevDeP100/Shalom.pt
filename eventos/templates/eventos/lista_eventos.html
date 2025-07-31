@@ -1,0 +1,381 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Eventos - Comunidade Shalom Portugal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .eventos-section {
+        padding: 0;
+        background: var(--shalom-light);
+        min-height: 100vh;
+    }
+    
+    .page-header {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 40px;
+    }
+    
+    .page-header h1 {
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .page-header p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+    
+    .filtros-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 25px;
+        margin-bottom: 30px;
+        height: fit-content;
+    }
+    
+    .filtros-card h5 {
+        color: var(--shalom-primary);
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    
+    .form-control, .form-select {
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--shalom-secondary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+    
+    .btn-filtrar {
+        background: var(--shalom-primary);
+        border: none;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    
+    .btn-filtrar:hover {
+        background: var(--shalom-secondary);
+        transform: translateY(-2px);
+    }
+    
+    .btn-limpar {
+        background: transparent;
+        border: 2px solid var(--shalom-primary);
+        color: var(--shalom-primary);
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .btn-limpar:hover {
+        background: var(--shalom-primary);
+        color: white;
+    }
+    
+    .evento-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        height: 100%;
+    }
+    
+    .evento-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .evento-image {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .evento-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+    
+    .evento-content {
+        padding: 20px 20px 20px 25px;
+    }
+    
+    .evento-title {
+        font-weight: 700;
+        color: var(--shalom-dark);
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+    
+    .evento-subtitle {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+    
+    .evento-info {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+    
+    .evento-info i {
+        width: 16px;
+        margin-right: 5px;
+        color: var(--shalom-primary);
+    }
+    
+    .evento-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-weight: 700;
+        color: var(--shalom-primary);
+        font-size: 1.1rem;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+        color: #6b7280;
+    }
+    
+    .btn-ver-evento {
+        background: var(--shalom-primary);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        width: 100%;
+        text-align: center;
+        font-weight: 600;
+    }
+    
+    .btn-ver-evento:hover {
+        background: var(--shalom-secondary);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .resultados-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .resultados-count {
+        color: var(--shalom-primary);
+        font-weight: 600;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6b7280;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        color: var(--shalom-secondary);
+        margin-bottom: 20px;
+    }
+    
+    .empty-state h3 {
+        color: var(--shalom-dark);
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="eventos-section">
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-calendar-alt"></i> Eventos</h1>
+            <p>Descubra e participe dos eventos da Comunidade Shalom Portugal</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <!-- Filtros -->
+            <div class="col-lg-3">
+                <div class="filtros-card">
+                    <h5><i class="fas fa-filter"></i> Filtros</h5>
+                    
+                    <form method="get">
+                        <div class="mb-3">
+                            <label for="busca" class="form-label">Buscar</label>
+                            <input type="text" class="form-control" id="busca" name="busca" 
+                                   value="{{ busca }}" placeholder="Título do evento...">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="categoria" class="form-label">Categoria</label>
+                            <select class="form-select" id="categoria" name="categoria">
+                                <option value="">Todas as categorias</option>
+                                {% for categoria in categorias %}
+                                <option value="{{ categoria.id }}" 
+                                        {% if categoria_selecionada == categoria.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ categoria.nome }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-filtrar">
+                            <i class="fas fa-search"></i> Filtrar
+                        </button>
+                        
+                        {% if busca or categoria_selecionada %}
+                        <a href="{% url 'eventos:lista_eventos' %}" class="btn btn-limpar">
+                            <i class="fas fa-times"></i> Limpar Filtros
+                        </a>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Lista de Eventos -->
+            <div class="col-lg-9">
+                <div class="resultados-header">
+                    <h3><i class="fas fa-calendar-alt"></i> Eventos Disponíveis</h3>
+                    <span class="resultados-count">{{ page_obj.paginator.count }} evento(s) encontrado(s)</span>
+                </div>
+                
+                {% if page_obj %}
+                <div class="row">
+                    {% for evento in page_obj %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="evento-card">
+                            {% if evento.imagem %}
+                            <div class="evento-image" style="background-image: url('{{ evento.imagem.url }}');">
+                            {% else %}
+                            <div class="evento-image" style="background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);">
+                            {% endif %}
+                                <span class="evento-badge" style="background-color: {{ evento.categoria.cor }};">
+                                    {{ evento.categoria.nome }}
+                                </span>
+                            </div>
+                            
+                            <div class="evento-content">
+                                <h5 class="evento-title">{{ evento.titulo }}</h5>
+                                <p class="evento-subtitle">{{ evento.descricao|truncatewords:15 }}</p>
+                                
+                                <div class="evento-info">
+                                    <div><i class="fas fa-calendar"></i> {{ evento.data_inicio|date:"d/m/Y H:i" }}</div>
+                                    <div><i class="fas fa-map-marker-alt"></i> {{ evento.local }}</div>
+                                </div>
+                                
+                                <div class="evento-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-number">{{ evento.inscricoes_count }}</div>
+                                        <div class="stat-label">Inscritos</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-number">€ {{ evento.preco }}</div>
+                                        <div class="stat-label">Preço</div>
+                                    </div>
+                                </div>
+                                
+                                <a href="{% url 'eventos:detalhe_evento' evento.id %}" class="btn-ver-evento">
+                                    <i class="fas fa-eye"></i> Ver Detalhes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Paginação -->
+                {% if page_obj.has_other_pages %}
+                <nav aria-label="Navegação de páginas" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if busca %}&busca={{ busca }}{% endif %}{% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if busca %}&busca={{ busca }}{% endif %}{% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if busca %}&busca={{ busca }}{% endif %}{% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Nenhum evento encontrado</h3>
+                    <p>Não encontramos eventos com os filtros selecionados.</p>
+                    <a href="{% url 'eventos:lista_eventos' %}" class="btn btn-shalom mt-3">
+                        <i class="fas fa-calendar-alt"></i> Ver Todos os Eventos
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

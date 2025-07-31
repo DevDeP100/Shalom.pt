@@ -1,0 +1,212 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Verificar Email - Comunidade Shalom Portugal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .verificacao-section {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 60px 0;
+    }
+    
+    .verificacao-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        padding: 40px;
+        max-width: 500px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    
+    .verificacao-header {
+        margin-bottom: 30px;
+    }
+    
+    .verificacao-header h2 {
+        color: var(--shalom-primary);
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .verificacao-header p {
+        color: #6b7280;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    .email-destaque {
+        background: var(--shalom-light);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
+        font-weight: 600;
+        color: var(--shalom-primary);
+    }
+    
+    .codigo-form {
+        margin: 30px 0;
+    }
+    
+    .codigo-input {
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 1.2rem;
+        text-align: center;
+        letter-spacing: 5px;
+        font-weight: 600;
+        width: 200px;
+        margin: 0 auto;
+        display: block;
+        transition: all 0.3s ease;
+    }
+    
+    .codigo-input:focus {
+        border-color: var(--shalom-secondary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+    
+    .btn-verificar {
+        background: var(--shalom-primary);
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-verificar:hover {
+        background: var(--shalom-secondary);
+        transform: translateY(-2px);
+    }
+    
+    .btn-reenviar {
+        background: transparent;
+        border: 2px solid var(--shalom-primary);
+        color: var(--shalom-primary);
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-reenviar:hover {
+        background: var(--shalom-primary);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .info-box {
+        background: #f0f9ff;
+        border: 1px solid #0ea5e9;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: left;
+    }
+    
+    .info-box h4 {
+        color: #0c4a6e;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+    
+    .info-box ul {
+        color: #0c4a6e;
+        margin: 0;
+        padding-left: 20px;
+    }
+    
+    .info-box li {
+        margin-bottom: 5px;
+    }
+    
+    .timer {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--shalom-accent);
+        margin: 10px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="verificacao-section">
+    <div class="container">
+        <div class="verificacao-card">
+            <div class="verificacao-header">
+                <h2><i class="fas fa-envelope"></i> Verificar Email</h2>
+                <p>Enviamos um código de verificação para:</p>
+                <div class="email-destaque">
+                    <i class="fas fa-envelope"></i> {{ user.email }}
+                </div>
+                <p class="text-muted mt-2">
+                    <small>Verifique sua caixa de entrada e pasta de spam</small>
+                </p>
+            </div>
+            
+            <div class="info-box">
+                <h4><i class="fas fa-info-circle"></i> O que fazer agora?</h4>
+                <ul>
+                    <li>Verifique sua caixa de entrada</li>
+                    <li>Procure por emails da Comunidade Shalom Portugal</li>
+                    <li>Digite o código de 6 dígitos abaixo</li>
+                    <li>O código expira em 24 horas</li>
+                </ul>
+            </div>
+            
+            <form method="post" class="codigo-form">
+                {% csrf_token %}
+                <input type="text" name="codigo" class="codigo-input" 
+                       placeholder="000000" maxlength="6" pattern="[0-9]{6}" required>
+                <button type="submit" class="btn btn-verificar">
+                    <i class="fas fa-check"></i> Verificar Código
+                </button>
+            </form>
+            
+            <div class="mt-4">
+                <p>Não recebeu o código?</p>
+                <a href="{% url 'eventos:reenviar_codigo' user.id %}" class="btn-reenviar">
+                    <i class="fas fa-paper-plane"></i> Reenviar Código
+                </a>
+            </div>
+            
+            <div class="mt-4">
+                <p class="text-muted">
+                    <i class="fas fa-shield-alt"></i> 
+                    Sua conta só será ativada após a verificação do email.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-focus no campo de código
+    document.querySelector('.codigo-input').focus();
+    
+    // Formatação automática do código
+    document.querySelector('.codigo-input').addEventListener('input', function(e) {
+        // Remove caracteres não numéricos
+        this.value = this.value.replace(/[^0-9]/g, '');
+        
+        // Limita a 6 dígitos
+        if (this.value.length > 6) {
+            this.value = this.value.slice(0, 6);
+        }
+    });
+</script>
+{% endblock %} 

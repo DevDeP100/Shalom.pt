@@ -1,0 +1,748 @@
+{% extends 'eventos/base.html' %}
+
+{% block title %}Comunidade Shalom Portugal - Notícias e Eventos{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --shalom-primary: #1e3a8a;
+        --shalom-secondary: #3b82f6;
+        --shalom-accent: #f59e0b;
+        --shalom-light: #f8fafc;
+        --shalom-dark: #1e293b;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+    }
+    
+    /* Garantir que a navbar-brand tenha o tamanho correto */
+    .navbar-brand {
+        font-weight: 700 !important;
+        color: var(--shalom-primary) !important;
+        font-size: 1.5rem !important;
+    }
+    
+    .hero-section {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        color: white;
+        padding: 80px 0;
+        position: relative;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="cross" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23cross)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+    
+    .search-box {
+        background: rgba(255,255,255,0.1);
+        border: 2px solid rgba(255,255,255,0.2);
+        border-radius: 50px;
+        padding: 15px 25px;
+        color: white;
+        backdrop-filter: blur(10px);
+    }
+    
+    .search-box::placeholder {
+        color: rgba(255,255,255,0.8);
+    }
+    
+    .news-section {
+        background: var(--shalom-light);
+        padding: 60px 0;
+    }
+    
+    .news-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+        border: none;
+    }
+    
+    .news-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .news-image {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .news-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        padding: 5px 15px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.8rem;
+        background: var(--shalom-accent);
+    }
+    
+    .news-date {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .news-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--shalom-dark);
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+    
+    .news-excerpt {
+        color: #6b7280;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .events-section {
+        background: white;
+        padding: 60px 0;
+    }
+    
+    .event-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+        border: 2px solid transparent;
+    }
+    
+    .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        border-color: var(--shalom-secondary);
+    }
+    
+    .event-image {
+        height: 180px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .event-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 15px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+    
+    .event-date {
+        color: var(--shalom-primary);
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .event-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--shalom-dark);
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+    
+    .event-location {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: var(--shalom-dark);
+        position: relative;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: var(--shalom-accent);
+        border-radius: 2px;
+    }
+    
+    .category-filter {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    .category-btn {
+        background: transparent;
+        border: 2px solid var(--shalom-secondary);
+        color: var(--shalom-secondary);
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin: 5px;
+    }
+    
+    .category-btn:hover,
+    .category-btn.active {
+        background: var(--shalom-secondary);
+        color: white;
+    }
+    
+    .stats-section {
+        background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);
+        color: white;
+        padding: 60px 0;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+    
+    .newsletter-section {
+        background: var(--shalom-light);
+        padding: 60px 0;
+    }
+    
+    .newsletter-form {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .btn-shalom {
+        background: var(--shalom-primary);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-shalom:hover {
+        background: var(--shalom-secondary);
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .btn-outline-shalom {
+        background: transparent;
+        border: 2px solid var(--shalom-primary);
+        color: var(--shalom-primary);
+        padding: 10px 25px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-shalom:hover {
+        background: var(--shalom-primary);
+        color: white;
+    }
+
+    /* Unified Featured Carousel */
+    .featured-carousel {
+        margin-top: 40px;
+    }
+    
+    .carousel-item {
+        height: 400px;
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .carousel-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(59, 130, 246, 0.4) 100%);
+        z-index: 1;
+    }
+
+    .carousel-item .carousel-image {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(1.1) contrast(1.1);
+    }
+    
+    .carousel-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 30px;
+        color: white;
+        z-index: 2;
+        background: linear-gradient(transparent, rgba(0,0,0,0.5));
+    }
+
+    .carousel-type-badge {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        background: rgba(255,255,255,0.3);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .carousel-type-badge.event {
+        background: rgba(245, 158, 11, 0.8);
+    }
+
+    .carousel-type-badge.news {
+        background: rgba(59, 130, 246, 0.8);
+    }
+    
+    .carousel-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+        color: #ffffff;
+    }
+
+    .carousel-info {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+        opacity: 0.95;
+        text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+    }
+
+    .carousel-info i {
+        margin-right: 5px;
+        color: #ffffff;
+    }
+
+    .carousel-btn {
+        background: rgba(255,255,255,0.25);
+        border: 2px solid rgba(255,255,255,0.4);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 3;
+    }
+
+    .carousel-btn:hover {
+        background: rgba(255,255,255,0.4);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 50px;
+        height: 50px;
+        background: rgba(255,255,255,0.3);
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255,255,255,0.5);
+        z-index: 10;
+    }
+
+    .carousel-control-prev {
+        left: 20px;
+    }
+
+    .carousel-control-next {
+        right: 20px;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        background: rgba(255,255,255,0.5);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 20px;
+        height: 20px;
+        filter: brightness(0) invert(1);
+    }
+
+    .carousel-indicators {
+        bottom: 20px;
+        z-index: 10;
+    }
+
+    .carousel-indicators button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.5);
+        border: none;
+        margin: 0 5px;
+    }
+
+    .carousel-indicators button.active {
+        background: white;
+        transform: scale(1.2);
+    }
+
+    /* Ajustar padding dos card-body */
+    .card-body {
+        padding: 20px 20px 20px 25px !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content text-center">
+            <h1 class="hero-title">Comunidade Shalom Portugal</h1>
+            <p class="hero-subtitle">Notícias, eventos e formação da Comunidade Católica Shalom em Portugal</p>
+            
+            <!-- Unified Featured Carousel -->
+            {% if eventos_destaque or noticias_destaque %}
+            <div class="featured-carousel">
+                <div id="featuredCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        {% for item in carousel_items %}
+                        <button type="button" data-bs-target="#featuredCarousel" data-bs-slide-to="{{ forloop.counter0 }}" 
+                                {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}">
+                        </button>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="carousel-inner">
+                        {% for item in carousel_items %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            {% if item.imagem %}
+                            <div class="carousel-image" style="background-image: url('{{ item.imagem.url }}');"></div>
+                            {% else %}
+                            <div class="carousel-image" style="background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);"></div>
+                            {% endif %}
+                            
+                            {% if item.tipo == 'evento' %}
+                            <a href="{% url 'eventos:detalhe_evento' item.id %}" class="carousel-btn">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </a>
+                            {% else %}
+                            <a href="{% url 'eventos:detalhe_noticia' item.id %}" class="carousel-btn">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </a>
+                            {% endif %}
+                            
+                            <div class="carousel-content">
+                                {% if item.tipo == 'evento' %}
+                                <span class="carousel-type-badge event">
+                                    <i class="fas fa-calendar"></i> Evento - {{ item.categoria.nome }}
+                                </span>
+                                {% else %}
+                                <span class="carousel-type-badge news">
+                                    <i class="fas fa-newspaper"></i> Notícia - {{ item.categoria.nome }}
+                                </span>
+                                {% endif %}
+                                
+                                <h3 class="carousel-title">{{ item.titulo }}</h3>
+                                <div class="carousel-info">
+                                    {% if item.tipo == 'evento' %}
+                                    <span><i class="fas fa-calendar"></i> {{ item.data_inicio|date:"d/m/Y H:i" }}</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> {{ item.local }}</span>
+                                    {% if item.preco > 0 %}
+                                    <span><i class="fas fa-euro-sign"></i> € {{ item.preco }}</span>
+                                    {% else %}
+                                    <span><i class="fas fa-gift"></i> Gratuito</span>
+                                    {% endif %}
+                                    {% else %}
+                                    <span><i class="fas fa-calendar"></i> {{ item.data_publicacao|date:"d/m/Y" }}</span>
+                                    <span><i class="fas fa-user"></i> {{ item.autor.get_full_name|default:item.autor.username }}</span>
+                                    <span><i class="fas fa-eye"></i> {{ item.visualizacoes }} visualizações</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Próximo</span>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- News Section -->
+<section id="news" class="news-section">
+    <div class="container">
+        <h2 class="section-title">Últimas Notícias</h2>
+        
+        <div class="row">
+            {% for noticia in noticias_recentes %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="news-card">
+                    {% if noticia.imagem %}
+                    <div class="news-image" style="background-image: url('{{ noticia.imagem.url }}');">
+                    {% else %}
+                    <div class="news-image" style="background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);">
+                    {% endif %}
+                        <span class="news-badge">{{ noticia.categoria.nome }}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="news-date">{{ noticia.data_publicacao|date:"d/m/Y" }}</div>
+                        <h5 class="news-title">{{ noticia.titulo }}</h5>
+                        {% if noticia.resumo %}
+                        <p class="news-excerpt">{{ noticia.resumo|truncatewords:15 }}</p>
+                        {% endif %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-user"></i> {{ noticia.autor.get_full_name|default:noticia.autor.username }}
+                            </small>
+                            <a href="{% url 'eventos:detalhe_noticia' noticia.id %}" class="btn btn-outline-shalom btn-sm">
+                                Ler Mais
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">Nenhuma notícia disponível no momento.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'eventos:lista_noticias' %}" class="btn btn-shalom btn-lg">
+                Ver Todas as Notícias
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Events Section -->
+<section class="events-section">
+    <div class="container">
+        <h2 class="section-title">Próximos Eventos</h2>
+        
+        <!-- Category Filter -->
+        <div class="category-filter">
+            <div class="text-center">
+                <button class="category-btn active">Todos</button>
+                {% for categoria in categorias %}
+                <button class="category-btn">{{ categoria.nome }}</button>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for evento in eventos_recentes %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="event-card">
+                    {% if evento.imagem %}
+                    <div class="event-image" style="background-image: url('{{ evento.imagem.url }}');">
+                    {% else %}
+                    <div class="event-image" style="background: linear-gradient(135deg, var(--shalom-primary) 0%, var(--shalom-secondary) 100%);">
+                    {% endif %}
+                        <span class="event-badge" style="background-color: {{ evento.categoria.cor }};">
+                            {{ evento.categoria.nome }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <div class="event-date">
+                            <i class="fas fa-calendar"></i> {{ evento.data_inicio|date:"d/m/Y" }}
+                        </div>
+                        <h5 class="event-title">{{ evento.titulo }}</h5>
+                        <div class="event-location">
+                            <i class="fas fa-map-marker-alt"></i> {{ evento.local }}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% if evento.preco > 0 %}
+                            <span class="text-primary fw-bold">€ {{ evento.preco }}</span>
+                            {% else %}
+                            <span class="text-success fw-bold">Gratuito</span>
+                            {% endif %}
+                            <a href="{% url 'eventos:detalhe_evento' evento.id %}" class="btn btn-outline-shalom btn-sm">
+                                Ver Detalhes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'eventos:lista_eventos' %}" class="btn btn-shalom btn-lg">
+                Ver Todos os Eventos
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">{{ eventos_recentes.count }}</div>
+                    <div class="stat-label">Eventos Ativos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">{{ categorias.count }}</div>
+                    <div class="stat-label">Categorias</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Membros</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Anos de Missão</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="section-title">Fique Conectado</h2>
+                <p class="lead mb-4">Inscreva-se para receber notícias e informações sobre nossos eventos</p>
+                <form class="newsletter-form">
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control form-control-lg" placeholder="Seu e-mail">
+                        <button class="btn btn-shalom btn-lg" type="submit">
+                            <i class="fas fa-paper-plane"></i> Inscrever
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Category filter functionality
+    $(document).ready(function() {
+        $('.category-btn').click(function() {
+            $('.category-btn').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        // Unified Featured Carousel initialization
+        if (document.getElementById('featuredCarousel')) {
+            const carousel = new bootstrap.Carousel(document.getElementById('featuredCarousel'), {
+                interval: 5000, // 5 segundos entre slides
+                wrap: true, // Loop infinito
+                keyboard: true, // Navegação por teclado
+                pause: 'hover' // Pausa no hover
+            });
+
+            // Adicionar controles de teclado
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    carousel.prev();
+                } else if (e.key === 'ArrowRight') {
+                    carousel.next();
+                }
+            });
+        }
+    });
+</script>
+{% endblock %} 
