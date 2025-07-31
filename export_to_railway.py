@@ -19,11 +19,11 @@ from psycopg2.extras import RealDictCursor
 
 # Configuração da base de dados do Railway
 RAILWAY_DB_CONFIG = {
-    'host': 'metro.proxy.rlwy.net',
-    'port': 58579,
+    'host': 'nozomi.proxy.rlwy.net',
+    'port': 45954,
     'database': 'railway',
     'user': 'postgres',
-    'password': 'rjsLVCvfZoMXXGExNHZcFYhXOSRWKBAb'
+    'password': 'iiWEtGHThaQxHFkNQXoJqUEbwxreDZwd'
 }
 
 def connect_to_railway_db():
