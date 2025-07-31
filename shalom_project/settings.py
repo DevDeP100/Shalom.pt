@@ -168,13 +168,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
     
     # CSRF Trusted Origins para Railway
-CSRF_TRUSTED_ORIGINS = [
-    'https://web-production-50e29.up.railway.app',
-    'https://*.up.railway.app',
-    'https://*.railway.app',
-    'http://localhost:8002',
-    'http://127.0.0.1:8002',
-]
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split(',')
     
 
 # Email Configuration
