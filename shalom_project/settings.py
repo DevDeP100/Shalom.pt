@@ -176,6 +176,13 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    
+    # CSRF Trusted Origins para Railway
+    CSRF_TRUSTED_ORIGINS = [
+        'https://web-production-50e29.up.railway.app',
+        'https://*.up.railway.app',
+        'https://*.railway.app',
+    ]
 else:
     # Configurações para desenvolvimento - desabilitar tudo
     SECURE_SSL_REDIRECT = False
@@ -187,6 +194,12 @@ else:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = False
     SECURE_HSTS_PRELOAD = False
     X_FRAME_OPTIONS = 'SAMEORIGIN'
+    
+    # CSRF Trusted Origins para desenvolvimento
+    CSRF_TRUSTED_ORIGINS = [
+        'http://localhost:8002',
+        'http://127.0.0.1:8002',
+    ]
 
 # Email Configuration
 
