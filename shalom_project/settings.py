@@ -154,25 +154,15 @@ STATICFILES_DIRS = [
 ]
 
 # Configuração do WhiteNoise para servir arquivos estáticos
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Configuração do WhiteNoise para servir arquivos estáticos
-if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-else:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-    
-
-    
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -190,6 +180,12 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     
+    # CSRF Trusted Origins para Railway
+    CSRF_TRUSTED_ORIGINS = [
+        'https://web-production-50e29.up.railway.app',
+        'https://*.up.railway.app',
+        'https://*.railway.app',
+    ]
 else:
     # Configurações para desenvolvimento - desabilitar tudo
     SECURE_SSL_REDIRECT = False
@@ -202,9 +198,11 @@ else:
     SECURE_HSTS_PRELOAD = False
     X_FRAME_OPTIONS = 'SAMEORIGIN'
     
-
-# CSRF Trusted Origins para Railway 
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split(',')    
+    # CSRF Trusted Origins para desenvolvimento
+    CSRF_TRUSTED_ORIGINS = [
+        'http://localhost:8002',
+        'http://127.0.0.1:8002',
+    ]
 
 # Email Configuration
 
