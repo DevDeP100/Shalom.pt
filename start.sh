@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Script de build para Railway
-echo "🚀 Iniciando build do projeto..."
+# Script de inicialização para Railway
+echo "🚀 Iniciando aplicação..."
 
 # Criar diretório staticfiles se não existir
 echo "📁 Criando diretório staticfiles..."
@@ -15,4 +15,9 @@ python manage.py collectstatic --noinput --clear
 echo "🗄️ Executando migrações..."
 python manage.py migrate
 
-echo "✅ Build concluído com sucesso!" 
+# Definir porta padrão se não estiver definida
+PORT=${PORT:-8000}
+
+# Iniciar o servidor
+echo "🌐 Iniciando servidor na porta $PORT..."
+exec gunicorn shalom_project.wsgi:application --bind 0.0.0.0:$PORT 
