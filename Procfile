@@ -1,1 +1,1 @@
-web: bash start.sh 
+web: bash -c "mkdir -p staticfiles && python manage.py collectstatic --noinput --clear && python manage.py migrate && gunicorn shalom_project.wsgi:application --bind 0.0.0.0:$PORT" 
