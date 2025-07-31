@@ -32,8 +32,15 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-9*&k(tm@46@avpp^q=e$_h96j3
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = [
-    os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else []
+    'localhost',
+    '127.0.0.1',
+    '.railway.app',
+    '.up.railway.app',
 ]
+
+# Adicionar hosts dinâmicos se a variável de ambiente existir
+if os.getenv('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS.extend(os.getenv('ALLOWED_HOSTS').split(','))
 
 
 # Application definition
